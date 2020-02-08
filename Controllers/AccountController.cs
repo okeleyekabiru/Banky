@@ -53,7 +53,7 @@ namespace Banky.Controllers
             
         }
         [HttpPut]
-        [Route("{accountnumber:int}")]
+        [Route("deposit/{accountnumber:int}")]
         public async Task<IHttpActionResult> Put(int accountnumber,decimal amount )
         {
             try
@@ -67,6 +67,29 @@ namespace Banky.Controllers
                     }
                 }
               
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
+            return NotFound();
+        }
+        [HttpPut]
+        [Route("withdraw/{accountnumber:int}")]
+        public async Task<IHttpActionResult> PutWithdraw(int accountnumber, decimal amount)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _banking.WithdrawFromBalance(amount, accountnumber);
+                    if (await _banking.SaveChangesAsync())
+                    {
+                        return Ok();
+                    }
+                }
+
             }
             catch (Exception e)
             {

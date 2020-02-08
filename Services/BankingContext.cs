@@ -97,6 +97,15 @@ namespace Banky.Services
         {
             throw new NotImplementedException();
         }
+
+        public void WithdrawFromBalance(decimal Balance, int accountNumber)
+        {
+            var response = _context.Account.FirstOrDefault(r => r.AccountNumber == accountNumber);
+            response.Balance -= Balance;
+            _context.Account.Attach(response);
+            _context.Entry(response).State = EntityState.Modified;
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             // Only return success if at least one row was changed

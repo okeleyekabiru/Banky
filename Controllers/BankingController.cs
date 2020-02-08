@@ -53,7 +53,8 @@ namespace Banky.Controllers
             {
                 var model = await _banking.Get(mockId, includesAccount: includesAccount);
                 if (model == null) return NotFound();
-                return Ok(model);
+                var map = _mapper.Map<Usermodel>(model);
+                return Ok(map);
             }
             catch (Exception e)
             {

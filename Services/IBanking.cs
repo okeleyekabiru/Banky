@@ -21,6 +21,9 @@ namespace Banky.Services
         Task<IEnumerable<Account>> GellAllAccounts();
         Account GetAccount( int Accountnumber);
         void FreezeAccount(bool decision, int accountnumber);
+
+        void WithdrawFromBalance(decimal Balance, int accountNumber);
+     
         Task<bool> SaveChangesAsync();
     }
 }
