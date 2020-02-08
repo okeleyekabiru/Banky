@@ -11,6 +11,7 @@ namespace Banky.Services
     {
         public BankMapper()
         {
+
             CreateMap<Users, Usermodel>()
                 .ReverseMap();
           

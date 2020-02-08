@@ -32,13 +32,13 @@ namespace Banky.App_Start
             var config = new MapperConfiguration(con =>
             {
                 con.AddProfile(new BankMapper());
+                con.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
             });
             bldr.RegisterInstance(config.CreateMapper())
                 .As<IMapper>()
                 .SingleInstance();
             bldr.RegisterType<BankingDbContext>()
                 .InstancePerRequest();
-
             bldr.RegisterType<BankingContext>()
                 .As<IBanking>()
                 .InstancePerRequest();

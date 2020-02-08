@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Web;
 using Banky.Models.Entity;
@@ -53,13 +54,12 @@ namespace Banky.Services
             return response;
         }
 
-        public void UpdateUser(Users user,int mockId)
+        public void UpdateUser(Users user)
         {
-            var users =  _context.Users.Find();
-              users = user;
-              _context.Users.Attach(users);
-           _context.Entry(users).State = EntityState.Modified;
-            _context.SaveChanges();
+           
+              _context.Users.Attach(user);
+           _context.Entry(user).State = EntityState.Modified;
+          
         }
 
         public void UpdateAccount(Account account, int accountNumber)
@@ -67,12 +67,11 @@ namespace Banky.Services
            
         }
 
-        public  void DeleteUser(int mockId)
+        public  void DeleteUser(Users user)
         {
-            var user = _context.Users.Find(mockId);
-//            _context.Users.Remove(user);
-            _context.Entry(user).State = EntityState.Deleted;
-            _context.SaveChanges();
+            
+            _context.Users.Remove(user);
+           
         }
 
         public void DeleteAccount(int accountnumber)
@@ -80,9 +79,10 @@ namespace Banky.Services
             throw new NotImplementedException();
         }
 
-        public List<Account> GellAllAccounts()
+        public  async Task<IEnumerable<Account>> GellAllAccounts(int id)
         {
-            throw new NotImplementedException();
+      var model =    await   _context.Account.Where(r => r.UserId == id).OrderBy(r => r.AccountType).ToListAsync();
+      return model;
         }
 
         public Account GetAccount(int Accountnumber)
@@ -100,5 +100,9 @@ namespace Banky.Services
             return (await _context.SaveChangesAsync()) > 0;
         }
 
+        public async Task<IEnumerable<Account>> GellAllAccounts()
+        {
+            return await _context.Account.ToListAsync();
+        }
     }
 }

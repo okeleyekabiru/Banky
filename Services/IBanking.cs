@@ -12,12 +12,13 @@ namespace Banky.Services
         void Add(Users user);
         Task<Users> Get(int mockId, bool includesAccount);
         Task<IEnumerable<Users>> GetAll( bool includesAccount);
-        void UpdateUser(Users user, int mockId);
+        void UpdateUser(Users user);
         void UpdateAccount(Account account ,int accountNumber);
-        void DeleteUser(int mockId);
+        void DeleteUser(Users user);
 
         void DeleteAccount(int accountnumber);
-        List<Account> GellAllAccounts();
+        Task<IEnumerable<Account>> GellAllAccounts(int id);
+        Task<IEnumerable<Account>> GellAllAccounts();
         Account GetAccount( int Accountnumber);
         void FreezeAccount(bool decision, int accountnumber);
         Task<bool> SaveChangesAsync();
