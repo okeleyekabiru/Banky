@@ -23,7 +23,7 @@ namespace Banky.Services
         void FreezeAccount(bool decision, int accountnumber);
 
         void WithdrawFromBalance(decimal Balance, int accountNumber);
-     
+     void Transfer(int senderaccountnumber, decimal amount, int receiverAccount);
         Task<bool> SaveChangesAsync();
     }
 }

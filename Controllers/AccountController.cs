@@ -98,6 +98,30 @@ namespace Banky.Controllers
 
             return NotFound();
         }
+        [HttpPut]
+        [Route("transfer/{senderaccountnumber:int}/{receiverAccount:int}")]
+        public async Task<IHttpActionResult> PutTransfer(int senderaccountnumber, int receiverAccount,decimal amount )
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _banking.Transfer(senderaccountnumber, amount, receiverAccount);
+                    
+                    if (await _banking.SaveChangesAsync())
+                    {
+                        return Ok();
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
+            return NotFound();
+        }
 
     }
 }

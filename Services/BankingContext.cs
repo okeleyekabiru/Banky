@@ -106,6 +106,12 @@ namespace Banky.Services
             _context.Entry(response).State = EntityState.Modified;
         }
 
+        public void Transfer(int senderaccountnumber, decimal amount, int receiverAccount)
+        {
+           WithdrawFromBalance(amount,senderaccountnumber);
+           UpdateAccountBalance(amount,receiverAccount);
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             // Only return success if at least one row was changed
