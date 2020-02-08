@@ -62,9 +62,12 @@ namespace Banky.Services
           
         }
 
-        public void UpdateAccount(Account account, int accountNumber)
+        public void UpdateAccountBalance(decimal amount, int accountNumber)
         {
-           
+            var response = _context.Account.FirstOrDefault(r => r.AccountNumber == accountNumber);
+            response.Balance += amount;
+            _context.Account.Attach(response);
+            _context.Entry(response).State = EntityState.Modified;
         }
 
         public  void DeleteUser(Users user)

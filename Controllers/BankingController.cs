@@ -22,7 +22,7 @@ namespace Banky.Controllers
             _banking = banking;
             _mapper = mapper;
         }
-        [Route()]
+        [Route("user")]
         [HttpGet]
         public async Task<IHttpActionResult >  Get(bool includesAccount = false)
         {
@@ -46,7 +46,7 @@ namespace Banky.Controllers
 
             ;
         }
-        [Route("{mockId}")]
+        [Route("user/{mockId}")]
         public async Task<IHttpActionResult> Get( int mockId, bool includesAccount = false)
         {
             try

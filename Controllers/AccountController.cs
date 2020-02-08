@@ -52,24 +52,29 @@ namespace Banky.Controllers
            
             
         }
-//        [HttpGet]
-//        [Route("account")]
-//        public async Task<IHttpActionResult> Get()
-//        {
-//            try
-//            {
-//                var model = await _banking.GellAllAccounts();
-//                if (model !=  null)
-//                {
-//                    return Ok(model);
-//                }
-//            }
-//            catch (Exception e)
-//            {
-//                return InternalServerError(e);
-//            }
-//
-//            return NotFound();
-//        }
+        [HttpPut]
+        [Route("{accountnumber:int}")]
+        public async Task<IHttpActionResult> Put(int accountnumber,decimal amount )
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _banking.UpdateAccountBalance(amount, accountnumber);
+                    if (await _banking.SaveChangesAsync())
+                    {
+                        return Ok();
+                    }
+                }
+              
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
+            return NotFound();
+        }
+
     }
 }

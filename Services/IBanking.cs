@@ -13,7 +13,7 @@ namespace Banky.Services
         Task<Users> Get(int mockId, bool includesAccount);
         Task<IEnumerable<Users>> GetAll( bool includesAccount);
         void UpdateUser(Users user);
-        void UpdateAccount(Account account ,int accountNumber);
+        void UpdateAccountBalance(decimal Balance,int accountNumber);
         void DeleteUser(Users user);
 
         void DeleteAccount(int accountnumber);
