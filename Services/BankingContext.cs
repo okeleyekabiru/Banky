@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Web;
 using Banky.Models.Entity;
@@ -53,26 +54,27 @@ namespace Banky.Services
             return response;
         }
 
-        public void UpdateUser(Users user,int mockId)
-        {
-            var users =  _context.Users.Find();
-              users = user;
-              _context.Users.Attach(users);
-           _context.Entry(users).State = EntityState.Modified;
-            _context.SaveChanges();
-        }
-
-        public void UpdateAccount(Account account, int accountNumber)
+        public void UpdateUser(Users user)
         {
            
+              _context.Users.Attach(user);
+           _context.Entry(user).State = EntityState.Modified;
+          
         }
 
-        public  void DeleteUser(int mockId)
+        public void UpdateAccountBalance(decimal amount, int accountNumber)
         {
-            var user = _context.Users.Find(mockId);
-//            _context.Users.Remove(user);
-            _context.Entry(user).State = EntityState.Deleted;
-            _context.SaveChanges();
+            var response = _context.Account.FirstOrDefault(r => r.AccountNumber == accountNumber);
+            response.Balance += amount;
+            _context.Account.Attach(response);
+            _context.Entry(response).State = EntityState.Modified;
+        }
+
+        public  void DeleteUser(Users user)
+        {
+            
+            _context.Users.Remove(user);
+           
         }
 
         public void DeleteAccount(int accountnumber)
@@ -80,9 +82,10 @@ namespace Banky.Services
             throw new NotImplementedException();
         }
 
-        public List<Account> GellAllAccounts()
+        public  async Task<IEnumerable<Account>> GellAllAccounts(int id)
         {
-            throw new NotImplementedException();
+      var model =    await   _context.Account.Where(r => r.UserId == id).OrderBy(r => r.AccountType).ToListAsync();
+      return model;
         }
 
         public Account GetAccount(int Accountnumber)
@@ -94,11 +97,30 @@ namespace Banky.Services
         {
             throw new NotImplementedException();
         }
+
+        public void WithdrawFromBalance(decimal Balance, int accountNumber)
+        {
+            var response = _context.Account.FirstOrDefault(r => r.AccountNumber == accountNumber);
+            response.Balance -= Balance;
+            _context.Account.Attach(response);
+            _context.Entry(response).State = EntityState.Modified;
+        }
+
+        public void Transfer(int senderaccountnumber, decimal amount, int receiverAccount)
+        {
+           WithdrawFromBalance(amount,senderaccountnumber);
+           UpdateAccountBalance(amount,receiverAccount);
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             // Only return success if at least one row was changed
             return (await _context.SaveChangesAsync()) > 0;
         }
 
+        public async Task<IEnumerable<Account>> GellAllAccounts()
+        {
+            return await _context.Account.ToListAsync();
+        }
     }
 }
